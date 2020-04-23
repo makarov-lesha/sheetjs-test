@@ -21,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const classes = useStyles();
   const [buttonSelectedNum, setButtonSelectedNum] = useState(1);
+  const [wb24, setWb24] = useState([]);
+
   const elt = useRef();
 
   useEffect(() => {
@@ -29,15 +31,22 @@ function App() {
       .then((ab) => {
         //read file
         const wb = XLSX.read(ab, { type: "array", cellStyles: true });
-
-        //change data and reaculculate
-        S5SCalc.update_value(wb, "Sheet1", "C11", buttonSelectedNum);
-
-        //assign to html text
+        S5SCalc.update_value(wb, "Sheet1", "C11", 1);
         const html = XLSX.utils.sheet_to_html(wb.Sheets[wb.SheetNames[0]]); // first worksheet HTML
         elt.current.innerHTML = html;
+        setWb24(wb);
       });
-  });
+  }, []);
+
+  //change data and reaculculate
+
+  const onScenarioChange = (scenarioNum) => {
+    const wbTemp = { ...wb24 };
+    S5SCalc.update_value(wbTemp, "Sheet1", "C11", scenarioNum);
+    const html = XLSX.utils.sheet_to_html(wbTemp.Sheets[wbTemp.SheetNames[0]]); // first worksheet HTML
+    elt.current.innerHTML = html;
+    setWb24({ ...wbTemp });
+  };
 
   return (
     <div className={classes.App}>
@@ -52,6 +61,7 @@ function App() {
         <Button
           onClick={() => {
             setButtonSelectedNum(1);
+            onScenarioChange(1);
           }}
         >
           {buttonSelectedNum === 1 ? "selected 1" : "select"}
@@ -59,6 +69,7 @@ function App() {
         <Button
           onClick={() => {
             setButtonSelectedNum(2);
+            onScenarioChange(2);
           }}
         >
           {buttonSelectedNum === 2 ? "selected 2" : "select"}
@@ -66,6 +77,7 @@ function App() {
         <Button
           onClick={() => {
             setButtonSelectedNum(3);
+            onScenarioChange(3);
           }}
         >
           {buttonSelectedNum === 3 ? "selected 3" : "select"}
