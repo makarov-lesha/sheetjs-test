@@ -4,8 +4,8 @@ import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Typography from "@material-ui/core/Typography";
 
-var S5SCalc = require("@sheet/formula");
-var XLSX = require("xlsx");
+import S5SCalc from "@sheet/formula";
+import XLSX from "xlsx";
 S5SCalc.XLSXLib = XLSX;
 
 const useStyles = makeStyles((theme) => ({
@@ -29,10 +29,6 @@ function App() {
       .then((ab) => {
         //read file
         const wb = XLSX.read(ab, { type: "array", cellStyles: true });
-        // let old_data = XLSX.utils.sheet_to_json(wb.Sheets.Sheet1, {
-        //   header: 1,
-        //   raw: true,
-        // });
 
         //change data and reaculculate
         S5SCalc.update_value(wb, "Sheet1", "C11", buttonSelectedNum);
