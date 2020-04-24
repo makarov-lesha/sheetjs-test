@@ -41,11 +41,13 @@ function App() {
   //change data and reaculculate
 
   const onScenarioChange = (scenarioNum) => {
-    const wbTemp = { ...wb24 };
-    S5SCalc.update_value(wbTemp, "Sheet1", "C11", scenarioNum);
-    const html = XLSX.utils.sheet_to_html(wbTemp.Sheets[wbTemp.SheetNames[0]]); // first worksheet HTML
+    // const wbTemp = { ...wb24 };
+    S5SCalc.update_value(wb24, "Sheet1", "C11", scenarioNum);
+    S5SCalc.update_value(wb24, "Sheet1", "G19", 100);
+    const html = XLSX.utils.sheet_to_html(wb24.Sheets[wb24.SheetNames[0]]); // first worksheet HTML
     elt.current.innerHTML = html;
-    setWb24({ ...wbTemp });
+    console.log(wb24);
+    // setWb24({ ...wbTemp });
   };
 
   return (
